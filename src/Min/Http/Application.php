@@ -20,6 +20,62 @@ class Application extends AbstractLayer
     return $this;
   }
 
+  public function get($path, $callback)
+  {
+    return $this->map('GET', $path, $callback);
+  }
+
+  public function post($path, $callback)
+  {
+    return $this->map('POST', $path, $callback);
+  }
+
+  public function put($path, $callback)
+  {
+    return $this->map('PUT', $path, $callback);
+  }
+
+  public function patch($path, $callback)
+  {
+    return $this->map('PATCH', $path, $callback);
+  }
+
+  public function delete($path, $callback)
+  {
+    return $this->map('DELETE', $path, $callback);
+  }
+
+  public function copy($path, $callback)
+  {
+    return $this->map('COPY', $path, $callback);
+  }
+
+  // not supported by nginx:
+  public function head($path, $callback)
+  {
+    return $this->map('HEAD', $path, $callback);
+  }
+
+  public function options($path, $callback)
+  {
+    return $this->map('OPTIONS', $path, $callback);
+  }
+
+  public function link($path, $callback)
+  {
+    return $this->map('LINK', $path, $callback);
+  }
+
+  public function unlink($path, $callback)
+  {
+    return $this->map('UNLINK', $path, $callback);
+  }
+
+  public function purge($path, $callback)
+  {
+    return $this->map('PURGE', $path, $callback);
+  }
+
   public function process(AbstractMessage $req = null)
   {
     if ($req === null) {
