@@ -12,7 +12,7 @@ try {
         ->use('Min\Http\Middleware\BodyParser')
 
         // route: GET /
-        ->map('GET', '/', function ($req, $res) {
+        ->get('/', function ($req, $res) {
             $res->body[] = '<h1>Hello, world!</h1>';
 
             $res->body[] = '<form action="'.$req->basePath.'/sign-in" method="POST">';
@@ -21,7 +21,7 @@ try {
         })
 
         // route: POST /sign-in
-        ->map('POST', '/sign-in', function ($req, $res) {
+        ->post('/sign-in', function ($req, $res) {
             $res->headers['Content-Type'] = 'application/json';
             $res->body['message'] = 'Example of Min\Http\Middleware\BodyParser';
             $res->body['postData'] = $req->data;
