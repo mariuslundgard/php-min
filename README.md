@@ -1,6 +1,6 @@
 # php-min
 
-A minimal middleware framework for PHP 5.3+.
+A minimal RESTful middleware framework for PHP 5.3+.
 
 ```
 # Install using Composer
@@ -16,7 +16,7 @@ In an ```index.php``` file:
 require 'vendor/autoload.php';
 
 (new Min\Http\Application())
-  ->map('GET', '/', function ($req, $res) {
+  ->get('/', function ($req, $res) {
     $res->body[] = '<h1>Hello, world!</h1>';
   })
   ->process()
