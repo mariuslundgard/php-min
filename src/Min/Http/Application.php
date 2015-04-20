@@ -9,6 +9,8 @@ use ReflectionClass;
 
 class Application extends AbstractLayer
 {
+    protected $routes;
+
     public function __construct(AbstractLayer $next = null, array $config = array())
     {
         parent::__construct($next, $config);
