@@ -45,13 +45,10 @@ class Response extends AbstractMessage
             }
 
             if (isset($this->headers['Transfer-Encoding']) && $this->headers['Transfer-Encoding'] === 'chunked') {
-                // header('Content-Type: application/json');
-                // echo 'ss';
                 header('Transfer-Encoding: chunked');
                 ob_end_flush();
                 flush();
                 ob_start();
-                // exit;
             }
 
             $setHeaders = false;
