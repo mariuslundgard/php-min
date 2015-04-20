@@ -131,7 +131,9 @@ class Request extends AbstractMessage
       'path' => substr($uriInfo['path'], strlen($basePath)),
       'body' => file_get_contents('php://input'),
       'query' => $_GET,
-      'time' => $_SERVER['REQUEST_TIME_FLOAT'],
+      'time' => isset($_SERVER['REQUEST_TIME_FLOAT'])
+        ? $_SERVER['REQUEST_TIME_FLOAT']
+        : $_SERVER['REQUEST_TIME'],
       'remote' => array(
         'address' => $_SERVER['REMOTE_ADDR'],
         'port' => $_SERVER['REMOTE_PORT'],
