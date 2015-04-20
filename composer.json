@@ -2,13 +2,16 @@
   "name": "mariuslundgard/php-min",
   "description": "A minimal RESTful middleware framework for PHP 5.3+.",
   "require": {
+    "mariuslundgard/php-util": "dev-master"
+  },
+  "require-dev": {
     "phpunit/phpunit": "~4.8"
   },
   "license": "MIT",
   "authors": [
     {
       "name": "Marius Lundgård",
-      "email": "Marius.Lundgard@nrk.no"
+      "email": "studio@mariuslundgard.com"
     }
   ],
   "autoload": {

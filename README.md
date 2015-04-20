@@ -16,11 +16,10 @@ In an ```index.php``` file:
 require 'vendor/autoload.php';
 
 (new Min\Http\Application())
-  ->get('/', function ($req, $res) {
-    $res->body[] = '<h1>Hello, world!</h1>';
-  })
-  ->process()
-    ->send();
+    ->get('/', function ($req, $res) {
+        $res->body[] = '<h1>Hello, world!</h1>';
+    })
+    ->process()->end();
 ```
 
 Add an ```.htaccess``` file in the same directory:

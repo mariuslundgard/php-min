@@ -4,7 +4,7 @@ namespace Min\Http\Middleware;
 
 use Min\AbstractLayer;
 use Min\AbstractMessage;
-use Exception;
+use Min\Http\Error;
 
 class BodyParser extends AbstractLayer
 {
@@ -17,7 +17,7 @@ class BodyParser extends AbstractLayer
     $data = json_decode($req->body, true);
 
     if ($isJsonRequest && !is_array($data) && in_array($req->method, array('POST', 'UPDATE'))) {
-      throw new Exception('The provided payload is not valid JSON');
+      throw new Error('The provided payload is not valid JSON');
     } else {
       if ($isJsonRequest || is_array($data) && count($req->data) === 0) {
         $req->data = $data;

@@ -2,19 +2,21 @@
 
 namespace Min;
 
-use Exception;
-use SplStack;
+use LogicException;
 use ReflectionClass;
+use SplStack;
 
 abstract class AbstractLayer
 {
   protected $next;
+  protected $config;
   protected $stack;
   protected $isResolving;
 
-  public function __construct(AbstractLayer $next = null)
+  public function __construct(AbstractLayer $next = null, array $config = array())
   {
     $this->next = $next;
+    $this->config = $config;
     $this->stack = new SplStack();
     $this->isResolved = false;
   }
@@ -30,7 +32,7 @@ abstract class AbstractLayer
       return $this;
     }
 
-    throw new Exception(sprintf('Unknown method: AbstractLayer::%s', $method));
+    throw new LogicException(sprintf('Unknown method: AbstractLayer::%s', $method));
   }
 
   public function setNext(AbstractLayer $next)
@@ -56,7 +58,7 @@ abstract class AbstractLayer
         $reflClass = new ReflectionClass($layer);
         $layer = $reflClass->newInstanceArgs(array($this));
       } else {
-        throw new Exception('The provided layer is not an instance of Min\AbstractLayer');
+        throw new LogicException('The provided layer is not an instance of Min\AbstractLayer');
       }
 
       $next = $layer;

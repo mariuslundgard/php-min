@@ -4,13 +4,12 @@ namespace Min\Http;
 
 use Min\AbstractLayer;
 use Min\AbstractMessage;
-use Exception;
 
 class Application extends AbstractLayer
 {
-  public function __construct(AbstractLayer $next = null)
+  public function __construct(AbstractLayer $next = null, array $config = array())
   {
-    parent::__construct($next);
+    parent::__construct($next, $config);
   }
 
   public function map($method, $path, $callback)
@@ -103,7 +102,7 @@ class Application extends AbstractLayer
         }
       }
 
-      throw new Exception('No matching route: ' . $req->method . ' ' . $req->path);
+      throw new Error('Not found: ' . $req->method . ' ' . $req->path, 404);
     }
 
     return parent::process($req);

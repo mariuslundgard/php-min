@@ -5,19 +5,50 @@ ini_set('display_errors', 'On');
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Min\Http;
+
+$config = array(
+    'title' => 'Example App',
+);
+
 try {
-    (new Min\Http\Application())
+    (new Http\Application(null, $config))
+
+        // adds JSONP-support
+        ->use('Min\Http\Middleware\JsonpRenderer')
+
+        // middleware for parsing Accept-headers
+        ->use('Min\Http\Middleware\AcceptParser')
 
         // middleware for parsing JSON payloads and form request data
         ->use('Min\Http\Middleware\BodyParser')
 
-        // route: GET /
-        ->get('/', function ($req, $res) {
-            $res->body[] = '<h1>Hello, world!</h1>';
+        // OPTIONS /
+        ->options('/', function ($req, $res, $app) {
+            $res->headers['Content-Type'] = 'application/json';
+            $res->body['GET'] = array(
+                'description' => 'View the dashboard',
+            );
+        })
 
-            $res->body[] = '<form action="'.$req->basePath.'/sign-in" method="POST">';
-            $res->body[] = '<input name="btn-sign-in" type="submit" value="Sign in">';
-            $res->body[] = '</form>';
+        // GET /
+        ->get('/', function ($req, $res) {
+            $res->headers['Content-Type'] = 'application/json';
+            $res->body['_links'] = array(
+                'self' => array(
+                    'href' => $req->basePath . '/',
+                    'title' => 'Dashboard',
+                ),
+                'sign-in' => array(
+                    'href' => $req->basePath . '/sign-in',
+                    'title' => 'Sign In',
+                ),
+            );
+        })
+
+        ->get('/sign-in', function ($req, $res) {
+            $res->headers['Content-Type'] = 'application/json';
+            $res->body[] = '<form></form>';
         })
 
         // route: POST /sign-in
@@ -27,18 +58,46 @@ try {
             $res->body['postData'] = $req->data;
         })
 
+        ->get('/stream', function ($req, $res) {
+            $res->headers['Content-Encoding'] = 'chunked';
+            $res->headers['Transfer-Encoding'] = 'chunked';
+            $res->headers['Content-Type'] = 'text/html';
+            $res->headers['Vary'] = 'Accept-Encoding';
+            // $res->headers['Connection'] = 'keep-alive';
+            $res->send();
+
+            $res->body[] = '<p>Hello</p>';
+            $res->send();
+
+            usleep(1000 * 1000); // wait for 1000 ms
+
+            $res->body[] = '<p>World! time=' . float_microtime() . '</p>';
+            $res->send();
+        })
+
         ->process()
-        ->send();
+        ->end();
+}
+
+catch (Http\Error $err) {
+    (new Http\Response(array(
+            'status' => $err->getCode(),
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => array(
+                'message' => $err->getMessage(),
+            ),
+        )))
+        ->end();
 }
 
 catch (Exception $err) {
     (new Min\Http\Response(array(
-            'status' => 400,
+            'status' => $err->getCode(),
             'headers' => array('Content-Type' => 'application/json'),
             'body' => array(
                 'message' => $err->getMessage(),
                 'trace' => $err->getTrace(),
             ),
         )))
-        ->send();
+        ->end();
 }
