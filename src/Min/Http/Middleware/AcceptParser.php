@@ -44,7 +44,7 @@ class AcceptParser extends AbstractLayer
      */
     public static function parse($header)
     {
-        $qValues = [];
+        $qValues = array();
         $items = str_trim_split($header, ',');
 
         foreach ($items as $item) {
