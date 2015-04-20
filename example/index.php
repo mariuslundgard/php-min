@@ -11,6 +11,25 @@ $config = array(
     'title' => 'Example App',
 );
 
+class FrontController extends Min\AbstractController
+{
+    public function index(Http\Request $req, Http\Response $res)
+    {
+        $res->headers['Content-Type'] = 'application/json';
+
+        $res->body['_links'] = array(
+            'self' => array(
+                'href' => $req->basePath . '/',
+                'title' => 'Dashboard',
+            ),
+            'sign-in' => array(
+                'href' => $req->basePath . '/sign-in',
+                'title' => 'Sign In',
+            ),
+        );
+    }
+}
+
 try {
     (new Http\Application(null, $config))
 
@@ -32,19 +51,7 @@ try {
         })
 
         // GET /
-        ->get('/', function ($req, $res) {
-            $res->headers['Content-Type'] = 'application/json';
-            $res->body['_links'] = array(
-                'self' => array(
-                    'href' => $req->basePath . '/',
-                    'title' => 'Dashboard',
-                ),
-                'sign-in' => array(
-                    'href' => $req->basePath . '/sign-in',
-                    'title' => 'Sign In',
-                ),
-            );
-        })
+        ->get('/', 'FrontController::index')
 
         ->get('/sign-in', function ($req, $res) {
             $res->headers['Content-Type'] = 'application/json';
