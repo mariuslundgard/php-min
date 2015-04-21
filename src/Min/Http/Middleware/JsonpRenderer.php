@@ -11,11 +11,14 @@ class JsonpRenderer extends AbstractLayer
   {
     $res = $this->next->process($req);
 
-    if (isset($res->headers['Content-Type']) &&
-        $res->headers['Content-Type'] === 'application/json' &&
-        isset($req->query['callback'])
-    ) {
-        // rewrite headers and body
+    // check
+    $isJsonType = isset($res->headers['Content-Type']) && in_array(
+        $res->headers['Content-Type'],
+        array('application/json', 'application/hal+json')
+    );
+
+    // rewrite headers and body
+    if ($isJsonType && isset($req->query['callback'])) {
         $res->headers['Content-Type'] = 'application/javascript';
         $res->body = sprintf('%s(%s)', $req->query['callback'], json_encode($res->body));
     }

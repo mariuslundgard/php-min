@@ -108,8 +108,13 @@ class Response extends AbstractMessage
             $this->body = array($this->body);
         }
 
+        $isJsonType = isset($this->headers['Content-Type']) && in_array(
+            $this->headers['Content-Type'],
+            array('application/json', 'application/hal+json')
+        );
+
         // render as JSON
-        if (isset($this->headers['Content-Type']) && $this->headers['Content-Type'] === 'application/json') {
+        if ($isJsonType) {
             die(json_encode($this->body));
         }
 

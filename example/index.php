@@ -15,7 +15,7 @@ class FrontController extends Min\AbstractController
 {
     public function index(Http\Request $req, Http\Response $res)
     {
-        $res->headers['Content-Type'] = 'application/json';
+        $res->headers['Content-Type'] = 'application/hal+json';
 
         $res->body['_links'] = array(
             'self' => array(
